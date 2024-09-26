@@ -16,7 +16,12 @@ type HTTPServer struct {
 
 func NewHttpServer() *HTTPServer {
 	// gRPC-Gateway 就是通过它来代理请求（将HTTP请求转为RPC请求）
-	mux := runtime.NewServeMux()
+	mux := runtime.NewServeMux(
+		runtime.WithMarshalerOption(runtime.MIMEWildcard, &CustomMarshaler{
+			Marshaler: &runtime.JSONPb{},
+		}),
+		runtime.WithErrorHandler(CustomErrorHandler),
+	)
 	httpServer := &HTTPServer{
 		mux: mux,
 	}
