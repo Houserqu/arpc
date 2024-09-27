@@ -10,7 +10,7 @@ import (
 func GetServerClient[T any](name string, newServerClient func(grpc.ClientConnInterface) T) (T, error) {
 	addr := viper.GetString("discovery." + name)
 
-	// 如果自定义服务地址，则使用 k8s 的服务发现
+	// 如果自定义服务地址，则使用 k8s 的 DNS 服务发现
 	if addr == "" {
 		addr = name + ":8000"
 	}
