@@ -3,6 +3,7 @@ package arpc
 import (
 	"github.com/Houserqu/arpc/agrpc"
 	"github.com/Houserqu/arpc/ahttp"
+	"github.com/spf13/viper"
 )
 
 type Server struct {
@@ -11,6 +12,9 @@ type Server struct {
 }
 
 func NewServer() *Server {
+	// 初始化配置
+	InitConfig()
+
 	server := Server{}
 
 	server.GrpcServer = agrpc.NewGrpcServer()
@@ -28,9 +32,9 @@ func (s *Server) Start() {
 }
 
 func (server *Server) StartGrpc() {
-	server.GrpcServer.StartGrpcServer(":8000")
+	server.GrpcServer.StartGrpcServer(viper.GetString("grpc.addr"))
 }
 
 func (server *Server) StartHttp() {
-	server.HTTPServer.StartHttpServer(":8080")
+	server.HTTPServer.StartHttpServer(viper.GetString("http.addr"))
 }

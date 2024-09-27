@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	"github.com/spf13/viper"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
@@ -31,7 +32,8 @@ func NewHttpServer() *HTTPServer {
 
 func (server *HTTPServer) RegisterHandler(registerHandlerFromEndpoint func(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) error) {
 	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
-	err := registerHandlerFromEndpoint(context.Background(), server.mux, "localhost:8000", opts)
+	log.Println(viper.GetString("grpc.addr"))
+	err := registerHandlerFromEndpoint(context.Background(), server.mux, viper.GetString("grpc.addr"), opts)
 	if err != nil {
 		log.Fatalln("Failed to register HTTP handler:", err)
 	}
