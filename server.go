@@ -14,6 +14,8 @@ type Server struct {
 func NewServer() *Server {
 	// 初始化配置
 	InitConfig()
+	InitMysql()
+	InitRedis()
 
 	server := Server{}
 
