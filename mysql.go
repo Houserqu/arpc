@@ -15,6 +15,7 @@ import (
 var Mysql *gorm.DB
 var Mysql1 *gorm.DB // 等同于 Mysql
 var Mysql2 *gorm.DB
+var Mysql3 *gorm.DB
 
 func InitMysql() {
 	if viper.GetString("mysql.host") != "" && !viper.GetBool("mysql.disable") {
@@ -38,6 +39,17 @@ func InitMysql() {
 			Database: viper.GetString("mysql2.database"),
 		})
 		log.Println("mysql2 connect success")
+	}
+
+	if viper.GetString("mysql3.host") != "" && !viper.GetBool("mysql3.disable") {
+		Mysql2 = NewMysql(MysqlConfig{
+			Host:     viper.GetString("mysql3.host"),
+			Port:     viper.GetString("mysql3.port"),
+			User:     viper.GetString("mysql3.user"),
+			Password: viper.GetString("mysql3.password"),
+			Database: viper.GetString("mysql3.database"),
+		})
+		log.Println("mysql3 connect success")
 	}
 }
 
