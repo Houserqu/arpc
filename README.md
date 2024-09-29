@@ -1,6 +1,38 @@
 # aRPC
 基于 grpc 封装的针对 k8s 环境部署的微服务框架，特点：轻量、简单
 
+## 开发
+
+### 示例项目
+（待完善）
+
+### 创建服务
+
+```
+package main
+
+import (
+	ip "ip/gen/go/kit/ip"
+	"ip/internal"
+
+	"github.com/Houserqu/arpc"
+)
+
+func main() {
+	// 创建服务
+	svr := arpc.NewServer()
+
+	// 注册 grpc 服务
+	ip.RegisterIPServer(svr.GrpcServer.Server, &internal.IPServer{})
+
+	// 注册 http 服务
+	svr.HTTPServer.RegisterHandler(ip.RegisterIPHandlerFromEndpoint)
+
+	// 启动服务
+	svr.Start()
+}
+```
+
 ## 主要特性
 
 ### gRPC
@@ -92,4 +124,48 @@ redis:
    - 0
    - 1
    - 2
+```
+
+## Buf
+建议使用 [buf](https://buf.build/) 管理 proto 文件的操作
+
+### 配置示例
+
+buf.yaml
+```
+version: v2
+modules:
+  - path: proto/kit/ip
+  - path: proto/app/user
+lint:
+  use:
+    - STANDARD
+  except:
+    - PACKAGE_VERSION_SUFFIX
+    - FIELD_LOWER_SNAKE_CASE
+    - SERVICE_SUFFIX
+breaking:
+  use:
+    - FILE
+deps:
+  - buf.build/googleapis/googleapis
+  - buf.build/envoyproxy/protoc-gen-validate
+```
+
+buf.gen.yaml
+```
+version: v1
+plugins:
+  - plugin: go
+    out: gen/go
+  - plugin: go-grpc
+    out: gen/go
+  - name: grpc-gateway
+    out: gen/go
+    opt:
+      - generate_unbound_methods=true
+  - name: validate
+    out: gen/go
+    opt:
+      - lang=go
 ```
