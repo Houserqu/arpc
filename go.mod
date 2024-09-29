@@ -4,8 +4,8 @@ go 1.21.3
 
 require (
 	github.com/fsnotify/fsnotify v1.7.0
-	github.com/go-redis/redis/v8 v8.11.5
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.22.0
+	github.com/redis/go-redis/v9 v9.6.1
 	github.com/spf13/viper v1.19.0
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240924160255-9d4c2d233b61
 	google.golang.org/grpc v1.67.0

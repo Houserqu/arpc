@@ -3,7 +3,7 @@ package arpc
 import (
 	"log"
 
-	"github.com/go-redis/redis/v8"
+	"github.com/redis/go-redis/v9"
 	"github.com/spf13/viper"
 )
 
@@ -26,6 +26,4 @@ func InitRedis() {
 		})
 		log.Printf("redis connect success: %d", db)
 	}
-
-	log.Println("redis connect success")
 }

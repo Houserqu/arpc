@@ -32,7 +32,6 @@ func NewHttpServer() *HTTPServer {
 
 func (server *HTTPServer) RegisterHandler(registerHandlerFromEndpoint func(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) error) {
 	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
-	log.Println(viper.GetString("grpc.addr"))
 	err := registerHandlerFromEndpoint(context.Background(), server.mux, viper.GetString("grpc.addr"), opts)
 	if err != nil {
 		log.Fatalln("Failed to register HTTP handler:", err)
