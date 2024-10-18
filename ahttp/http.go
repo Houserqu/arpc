@@ -9,6 +9,7 @@ import (
 	"github.com/spf13/viper"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/protobuf/encoding/protojson"
 )
 
 type HTTPServer struct {
@@ -19,7 +20,11 @@ func NewHttpServer() *HTTPServer {
 	// gRPC-Gateway 就是通过它来代理请求（将HTTP请求转为RPC请求）
 	mux := runtime.NewServeMux(
 		runtime.WithMarshalerOption(runtime.MIMEWildcard, &CustomMarshaler{
-			Marshaler: &runtime.JSONPb{},
+			Marshaler: &runtime.JSONPb{
+				MarshalOptions: protojson.MarshalOptions{
+					UseProtoNames: true,
+				},
+			},
 		}),
 		runtime.WithErrorHandler(CustomErrorHandler),
 	)
