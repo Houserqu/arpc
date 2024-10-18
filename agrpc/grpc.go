@@ -12,10 +12,20 @@ type GRPCServer struct {
 }
 
 // NewServer 创建新的 gRPC 服务并附加拦截器
-func NewGrpcServer() *GRPCServer {
+func NewGrpcServer(userInterceptors []grpc.UnaryServerInterceptor) *GRPCServer {
+	// 系统内置的拦截器
+	interceptors := []grpc.UnaryServerInterceptor{
+		validationInterceptor,    // 参数校验拦截器
+		PanicRecoveryInterceptor, // panic 恢复拦截器
+	}
+
+	// 将用户自定义的拦截器和系统内置的拦截器合并
+	interceptors = append(interceptors, userInterceptors...)
+
+	chainUnaryInterceptor := grpc.ChainUnaryInterceptor(interceptors...)
+
 	opts := []grpc.ServerOption{
-		// grpc.UnaryInterceptor(interceptor.LoggingInterceptor), // 日志拦截器
-		grpc.UnaryInterceptor(validationInterceptor), // 参数校验拦截器
+		chainUnaryInterceptor,
 	}
 
 	s := grpc.NewServer(opts...)

@@ -4,6 +4,7 @@ import (
 	"github.com/Houserqu/arpc/agrpc"
 	"github.com/Houserqu/arpc/ahttp"
 	"github.com/spf13/viper"
+	"google.golang.org/grpc"
 )
 
 type Server struct {
@@ -11,15 +12,24 @@ type Server struct {
 	HTTPServer *ahttp.HTTPServer
 }
 
-func NewServer() *Server {
-	// 初始化配置
+type ServerConfig struct {
+	GrpcInterceptors []grpc.UnaryServerInterceptor
+}
+
+func NewServer(args ...any) *Server {
 	InitConfig()
 	InitMysql()
 	InitRedis()
 
+	// 服务配置
+	var serverConfig ServerConfig
+	if len(args) > 0 {
+		serverConfig = args[0].(ServerConfig)
+	}
+
 	server := Server{}
 
-	server.GrpcServer = agrpc.NewGrpcServer()
+	server.GrpcServer = agrpc.NewGrpcServer(serverConfig.GrpcInterceptors)
 	server.HTTPServer = ahttp.NewHttpServer()
 
 	return &server
