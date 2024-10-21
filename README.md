@@ -169,3 +169,12 @@ plugins:
     opt:
       - lang=go
 ```
+
+### Git SubModule
+记录一些 git 子模块的操作
+
+```bash
+# 拉取主仓库后，如何拉取子模块仓库（需要存在 .gitmodules 文件）
+git submodule init
+git submodule update
+```
