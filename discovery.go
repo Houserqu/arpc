@@ -1,25 +1,40 @@
 package arpc
 
 import (
+	"log"
+
 	"github.com/spf13/viper"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-// GetServerClient 获取服务客户端
-func GetServerClient[T any](name string, newServerClient func(grpc.ClientConnInterface) T) (T, error) {
-	addr := viper.GetString("discovery." + name)
+// 存储服务的客户端
+var clients = make(map[string]interface{})
 
-	// 如果自定义服务地址，则使用 k8s 的 DNS 服务发现
+// GetServerClient 获取服务客户端
+func GetServerClient[T any](name string, newServerClient func(grpc.ClientConnInterface) T) T {
+	// 如果客户端已经存在，则直接返回
+	if client, ok := clients[name]; ok {
+		return client.(T)
+	}
+
+	// 获取服务地址（优先取配置文件的）
+	addr := viper.GetString("discovery." + name)
 	if addr == "" {
 		addr = name + ":8000"
 	}
 
+	// 创建客户端
 	conn, err := grpc.NewClient(addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		var t T
-		return t, err
+		return t
 	}
 
-	return newServerClient(conn), nil
+	client := newServerClient(conn)
+	clients[name] = client
+
+	log.Println("Create client: ", name)
+
+	return client
 }
