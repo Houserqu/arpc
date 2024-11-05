@@ -26,6 +26,7 @@ func NewGrpcServer(userInterceptors []grpc.UnaryServerInterceptor) *GRPCServer {
 
 	opts := []grpc.ServerOption{
 		chainUnaryInterceptor,
+		grpc.MaxRecvMsgSize(100 * 1024 * 1024),
 	}
 
 	s := grpc.NewServer(opts...)
