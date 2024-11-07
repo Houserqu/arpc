@@ -4,6 +4,7 @@ import (
 	"log"
 	"net"
 
+	"github.com/spf13/viper"
 	"google.golang.org/grpc"
 )
 
@@ -26,7 +27,7 @@ func NewGrpcServer(userInterceptors []grpc.UnaryServerInterceptor) *GRPCServer {
 
 	opts := []grpc.ServerOption{
 		chainUnaryInterceptor,
-		grpc.MaxRecvMsgSize(100 * 1024 * 1024),
+		grpc.MaxRecvMsgSize(viper.GetInt("grpc.max_msg_size") * 1024 * 1024),
 	}
 
 	s := grpc.NewServer(opts...)

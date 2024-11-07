@@ -24,6 +24,7 @@ func InitConfig() {
 	// 设置默认值
 	viper.SetDefault("grpc.addr", "0.0.0.0:8000")
 	viper.SetDefault("http.addr", "0.0.0.0:8080")
+	viper.SetDefault("grpc.max_msg_size", 100)
 
 	// 加载配置文件
 	err := viper.ReadInConfig()

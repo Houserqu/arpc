@@ -38,7 +38,7 @@ func NewHttpServer() *HTTPServer {
 func (server *HTTPServer) RegisterHandler(registerHandlerFromEndpoint func(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) error) {
 	opts := []grpc.DialOption{
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
-		grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(100 * 1024 * 1024)),
+		grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(viper.GetInt("grpc.max_msg_size") * 1024 * 1024)),
 	}
 	err := registerHandlerFromEndpoint(context.Background(), server.mux, viper.GetString("grpc.addr"), opts)
 	if err != nil {
