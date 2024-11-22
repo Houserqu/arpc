@@ -25,7 +25,11 @@ func GetServerClient[T any](name string, newServerClient func(grpc.ClientConnInt
 	}
 
 	// 创建客户端
-	conn, err := grpc.NewClient(addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.NewClient(
+		addr,
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(viper.GetInt("grpc.max_msg_size")*1024*1024)),
+	)
 	if err != nil {
 		var t T
 		return t
