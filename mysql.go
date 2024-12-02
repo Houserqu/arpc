@@ -6,10 +6,12 @@ import (
 	"os"
 	"time"
 
+	"github.com/Houserqu/arpc/gorm_ext"
 	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
+	"gorm.io/gorm/schema"
 )
 
 var Mysql *gorm.DB
@@ -18,6 +20,10 @@ var Mysql2 *gorm.DB
 var Mysql3 *gorm.DB
 
 func InitMysql() {
+	// 注册自定义序列化器
+	schema.RegisterSerializer("datetimeint64", gorm_ext.TimestampInt64Serializer{})
+	schema.RegisterSerializer("datetimeint32", gorm_ext.TimestampInt32Serializer{})
+
 	if viper.GetString("mysql.host") != "" && !viper.GetBool("mysql.disable") {
 		Mysql = NewMysql(MysqlConfig{
 			Host:     viper.GetString("mysql.host"),
