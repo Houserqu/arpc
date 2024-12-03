@@ -23,6 +23,7 @@ func CustomErrorHandler(ctx context.Context, mux *runtime.ServeMux, marshaler ru
 		} else if values, exist := md.TrailerMD["grpc-gateway-http-status"]; exist {
 			httpStatusCode, _ = strconv.Atoi(values[0])
 		}
+	}
 
 	w.WriteHeader(httpStatusCode)
 
