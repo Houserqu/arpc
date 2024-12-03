@@ -35,6 +35,10 @@ func (TimestampInt32Serializer) Scan(ctx context.Context, field *schema.Field, d
 			return fmt.Errorf("failed to unmarshal timestamp value: %#v", dbValue)
 		}
 
+		if result < 0 {
+			result = 0
+		}
+
 		field.Set(ctx, dst, result)
 	}
 
