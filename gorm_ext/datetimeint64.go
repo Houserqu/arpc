@@ -47,5 +47,5 @@ func (TimestampInt64Serializer) Scan(ctx context.Context, field *schema.Field, d
 
 // Value 实现 driver.Valuer 接口，用于写入数据库
 func (TimestampInt64Serializer) Value(ctx context.Context, field *schema.Field, dst reflect.Value, fieldValue interface{}) (interface{}, error) {
-	return time.UnixMilli(fieldValue.(int64)), nil // 将时间戳转为 time.Time 类型
+	return time.Unix(fieldValue.(int64), 0), nil // 将时间戳转为 time.Time 类型
 }
