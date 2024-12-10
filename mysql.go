@@ -21,8 +21,7 @@ var Mysql3 *gorm.DB
 
 func InitMysql() {
 	// 注册自定义序列化器
-	schema.RegisterSerializer("datetimeint64", gorm_ext.TimestampInt64Serializer{})
-	schema.RegisterSerializer("datetimeint32", gorm_ext.TimestampInt32Serializer{})
+	schema.RegisterSerializer("timestamp", gorm_ext.TimestampSerializer{})
 
 	if viper.GetString("mysql.host") != "" && !viper.GetBool("mysql.disable") {
 		Mysql = NewMysql(MysqlConfig{
