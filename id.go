@@ -9,7 +9,7 @@ import (
 // 雪花ID生成器
 var Sf *sonyflake.Sonyflake
 
-func InitSnowId() {
+func InitSnowID() {
 	Sf = sonyflake.NewSonyflake(sonyflake.Settings{})
 }
 
