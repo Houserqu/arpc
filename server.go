@@ -20,6 +20,7 @@ func NewServer(args ...any) *Server {
 	InitConfig()
 	InitMysql()
 	InitRedis()
+	InitSnowId()
 
 	// 服务配置
 	var serverConfig ServerConfig
