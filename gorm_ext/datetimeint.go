@@ -67,6 +67,11 @@ func (TimestampSerializer) Value(ctx context.Context, field *schema.Field, dst r
 		return
 	}
 
+	if v == -1 {
+		value = nil
+		return
+	}
+
 	switch len(strconv.FormatInt(v, 10)) {
 	case 10:
 		value = time.Unix(v, 0)
