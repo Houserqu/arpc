@@ -18,6 +18,7 @@ func NewGrpcServer(userInterceptors []grpc.UnaryServerInterceptor) *GRPCServer {
 	interceptors := []grpc.UnaryServerInterceptor{
 		validationInterceptor,    // 参数校验拦截器
 		PanicRecoveryInterceptor, // panic 恢复拦截器
+		LoggingInterceptor,       // 日志拦截器
 	}
 
 	// 将用户自定义的拦截器和系统内置的拦截器合并
