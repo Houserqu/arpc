@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"log"
 	"strings"
+
+	"google.golang.org/grpc/metadata"
 )
 
 // 定义日志级别
@@ -33,8 +35,11 @@ func LogWithFields(ctx context.Context, level string, format string, a ...any) {
 
 // getRequestID 从上下文中获取 requestID
 func getRequestID(ctx context.Context) string {
-	if requestID, ok := ctx.Value("reqId").(string); ok {
-		return requestID
+	md, ok := metadata.FromIncomingContext(ctx)
+	if ok {
+		if requestIDs, exists := md["request-id"]; exists {
+			return requestIDs[0]
+		}
 	}
 	return "EMPTY_REQUEST_ID"
 }
