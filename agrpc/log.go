@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/samber/lo"
+	uuid "github.com/satori/go.uuid"
 	"github.com/spf13/viper"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
@@ -38,5 +39,8 @@ func getRequestID(ctx context.Context) string {
 			return requestIDs[0]
 		}
 	}
-	return "EMPTY_REQUEST_ID"
+	// 生成request_id
+	requestID := uuid.NewV4().String()
+	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("request-id", requestID))
+	return requestID
 }

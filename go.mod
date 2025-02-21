@@ -7,6 +7,7 @@ require (
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.22.0
 	github.com/redis/go-redis/v9 v9.6.1
 	github.com/samber/lo v1.49.1
+	github.com/satori/go.uuid v1.2.0
 	github.com/sony/sonyflake v1.2.0
 	github.com/spf13/viper v1.19.0
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240924160255-9d4c2d233b61

@@ -6,6 +6,7 @@ import (
 	"log"
 	"strings"
 
+	uuid "github.com/satori/go.uuid"
 	"google.golang.org/grpc/metadata"
 )
 
@@ -41,7 +42,9 @@ func getRequestID(ctx context.Context) string {
 			return requestIDs[0]
 		}
 	}
-	return "EMPTY_REQUEST_ID"
+	requestID := uuid.NewV4().String()
+	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("request-id", requestID))
+	return requestID
 }
 
 // Info 输出信息级别日志
