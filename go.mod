@@ -4,6 +4,7 @@ go 1.21.3
 
 require (
 	github.com/fsnotify/fsnotify v1.7.0
+	github.com/go-resty/resty/v2 v2.16.5
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.22.0
 	github.com/redis/go-redis/v9 v9.6.1
 	github.com/samber/lo v1.49.1
@@ -37,8 +38,8 @@ require (
 	go.uber.org/atomic v1.9.0 // indirect
 	go.uber.org/multierr v1.9.0 // indirect
 	golang.org/x/exp v0.0.0-20230905200255-921286631fa9 // indirect
-	golang.org/x/net v0.29.0 // indirect
-	golang.org/x/sys v0.25.0 // indirect
+	golang.org/x/net v0.33.0 // indirect
+	golang.org/x/sys v0.28.0 // indirect
 	golang.org/x/text v0.21.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20240924160255-9d4c2d233b61 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
