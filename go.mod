@@ -5,6 +5,7 @@ go 1.21.3
 require (
 	github.com/fsnotify/fsnotify v1.7.0
 	github.com/go-resty/resty/v2 v2.16.5
+	github.com/golang/protobuf v1.5.3
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.22.0
 	github.com/redis/go-redis/v9 v9.6.1
 	github.com/samber/lo v1.49.1
