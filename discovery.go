@@ -1,11 +1,14 @@
 package arpc
 
 import (
+	"context"
 	"log"
 
+	uuid "github.com/satori/go.uuid"
 	"github.com/spf13/viper"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/metadata"
 )
 
 // 存储服务的客户端
@@ -29,6 +32,16 @@ func GetServerClient[T any](name string, newServerClient func(grpc.ClientConnInt
 		addr,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 		grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(viper.GetInt("grpc.max_msg_size")*1024*1024)),
+		grpc.WithUnaryInterceptor(func(ctx context.Context, method string, req, reply any, cc *grpc.ClientConn, invoker grpc.UnaryInvoker, opts ...grpc.CallOption) error {
+			requestID, ok := ctx.Value("request-id").(string)
+			if !ok || requestID == "" {
+				requestID = uuid.NewV4().String()
+			}
+
+			ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("request-id", requestID))
+
+			return invoker(ctx, method, req, reply, cc)
+		}),
 	)
 	if err != nil {
 		var t T

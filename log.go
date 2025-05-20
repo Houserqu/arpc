@@ -7,7 +7,6 @@ import (
 	"strings"
 
 	uuid "github.com/satori/go.uuid"
-	"google.golang.org/grpc/metadata"
 )
 
 // 定义日志级别
@@ -35,16 +34,14 @@ func LogWithFields(ctx context.Context, level string, format string, a ...any) {
 }
 
 // getRequestID 从上下文中获取 requestID
-func getRequestID(ctx context.Context) string {
-	md, ok := metadata.FromIncomingContext(ctx)
-	if ok {
-		if requestIDs, exists := md["request-id"]; exists {
-			return requestIDs[0]
-		}
+func getRequestID(ctx context.Context) (requestID string) {
+	reqIDAny := ctx.Value("request-id")
+	if reqIDAny != nil {
+		requestID = reqIDAny.(string)
+	} else {
+		requestID = uuid.NewV4().String()
 	}
-	requestID := uuid.NewV4().String()
-	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("request-id", requestID))
-	return requestID
+	return
 }
 
 // Info 输出信息级别日志
