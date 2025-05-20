@@ -20,7 +20,7 @@ const (
 // logWithFields 根据日志级别和字段输出日志
 func LogWithFields(ctx context.Context, level string, format string, a ...any) {
 	// 获取 traceID 和时间戳
-	traceID := getRequestID(ctx)
+	traceID := GetRequestID(ctx)
 
 	// 构建日志字段
 	logEntry := []string{
@@ -34,7 +34,7 @@ func LogWithFields(ctx context.Context, level string, format string, a ...any) {
 }
 
 // getRequestID 从上下文中获取 requestID
-func getRequestID(ctx context.Context) (requestID string) {
+func GetRequestID(ctx context.Context) (requestID string) {
 	reqIDAny := ctx.Value("request-id")
 	if reqIDAny != nil {
 		requestID = reqIDAny.(string)
