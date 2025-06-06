@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"time"
 
 	"github.com/Houserqu/arpc/gorm_ext"
 	"github.com/spf13/viper"
@@ -67,22 +66,21 @@ type MysqlConfig struct {
 }
 
 func NewMysql(config MysqlConfig) *gorm.DB {
-	// 日志级别
-	disableLog := viper.GetBool("mysql.disable_log")
-	logLevel := logger.Info
-	if disableLog {
-		logLevel = logger.Silent
-	}
+	var dbLogger logger.Interface
 
-	dbLogger := logger.New(
-		log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer
-		logger.Config{
-			SlowThreshold:             time.Second, // 慢 SQL 阈值
-			LogLevel:                  logLevel,    // 日志级别
-			IgnoreRecordNotFoundError: true,        // 忽略ErrRecordNotFound（记录未找到）错误
-			Colorful:                  false,       // 禁用彩色打印
-		},
-	)
+	if viper.GetBool("dev") {
+		// 开发环境使用自定义日志配置
+		dbLogger = logger.New(
+			log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer
+			logger.Config{
+				LogLevel: logger.Info, // 日志级别
+				Colorful: false,       // 禁用彩色打印
+			},
+		)
+	} else {
+		// 生产环境适应默认配置（只输出慢 sql 和错误日志）
+		dbLogger = logger.Default
+	}
 
 	dsn := fmt.Sprint(config.User, ":", config.Password, "@tcp(", config.Host, ":", config.Port, ")/", config.Database, "?charset=utf8mb4&parseTime=True&loc=Local")
 	db, err := gorm.Open(mysql.New(mysql.Config{DSN: dsn}), &gorm.Config{
